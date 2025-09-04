@@ -1,0 +1,17 @@
+rag_ingest_task:
+  description: >
+    Take a user document (raw text or uploaded file), split it into chunks,
+    create embeddings using the user’s selected embedding model,
+    and store them in the vector database. 
+  expected_output: >
+    Confirmation that embeddings have been successfully stored in the vector DB.
+  agent: rag_agent
+
+rag_retrieve_task:
+  description: >
+    When given a user query, retrieve the top-k most relevant document chunks
+    from the vector database using semantic similarity search.
+  expected_output: >
+    A structured JSON list of retrieved chunks with their similarity scores,
+    suitable for passing as context to an LLM in the user’s workflow.
+  agent: rag_agent
