@@ -1,9 +1,7 @@
 from crewai import Agent, Crew, Task
 from crewai.project import CrewBase, agent, task
 from typing import List
-from .tools.rag_tool import rag_ingest, rag_retrieve
-
-
+from simplerag.tools.rag_tool import rag_ingest, rag_retrieve
 @CrewBase
 class RagCrew:
     
@@ -13,37 +11,25 @@ class RagCrew:
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
     
-    def rag_ingest(self):
-        return rag_ingest
-    
-    def rag_retrieve(self):
-        return rag_retrieve
-    
     def __init__(self):
-        self.load_configurations()  # ensure YAML is loaded
+        self.load_configurations()
         self.map_all_agent_variables()
         self.map_all_task_variables()
     
-    # -----------------------------
-    # Agent Definition
-    # -----------------------------
     @agent
     def rag_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["rag_agent"],
-            tools=[rag_ingest, rag_retrieve],  # Add tools here
+            tools=[rag_ingest, rag_retrieve],
             verbose=True
         )
     
-    # -----------------------------
-    # Tasks
-    # -----------------------------
     @task
     def ingest_task(self) -> Task:
         return Task(
             config=self.tasks_config["rag_ingest_task"],
             agent=self.rag_agent(),
-            tools=[rag_ingest]  # Specify the specific tool for this task
+            tools=[rag_ingest]
         )
     
     @task
@@ -51,14 +37,10 @@ class RagCrew:
         return Task(
             config=self.tasks_config["rag_retrieve_task"],
             agent=self.rag_agent(),
-            tools=[rag_retrieve]  # Specify the specific tool for this task
+            tools=[rag_retrieve]
         )
     
-    # -----------------------------
-    # Specialized Crew Builders
-    # -----------------------------
     def ingest_crew(self) -> Crew:
-        """Creates a Crew specifically for the ingestion task."""
         return Crew(
             agents=[self.rag_agent()],
             tasks=[self.ingest_task()],
@@ -66,7 +48,6 @@ class RagCrew:
         )
         
     def retrieve_crew(self) -> Crew:
-        """Creates a Crew specifically for the retrieval task."""
         return Crew(
             agents=[self.rag_agent()],
             tasks=[self.retrieve_task()],
