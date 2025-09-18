@@ -1,9 +1,15 @@
 rag_ingest_task:
   description: >
-    Take a user document (raw text or uploaded file), split it into chunks, 
-    create embeddings using the user's selected embedding model, and store them in the vector database.
+    Take user input which can be either:
+    1. Raw text content use rag_ingest tool to split it into chunks and store directly
+    2. File path as input use rag_ingest_file tool to parse the file (supports PDF, DOCX, HTML, images, audio, etc.), extract content, split into chunks
+    
+    The user input to process is: {user_input}
+    
+    Automatically detect the input type and use appropriate tools which are mentioned.
+    Create embeddings using the user's selected embedding model and store in vector database.
   expected_output: >
-    Confirmation that embeddings have been successfully stored in the vector DB.
+    Confirmation that content has been successfully processed and embeddings stored in the vector DB.
   agent: rag_agent
 
 rag_retrieve_task:
@@ -12,6 +18,8 @@ rag_retrieve_task:
     The user query is: {query}
     Do NOT make assumptions about the query. Use ONLY the provided query: {query}
     Retrieve the top-3 most relevant document chunks using semantic similarity search.
+    
   expected_output: >
-    A JSON list of retrieved chunks with their similarity scores and text content for the query: {query}
+    A JSON list of retrieved chunks with their similarity scores, text content, and source 
+    metadata for the query: {query}
   agent: rag_agent

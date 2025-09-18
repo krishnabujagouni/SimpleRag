@@ -1,7 +1,7 @@
 from crewai import Agent, Crew, Task
 from crewai.project import CrewBase, agent, task
 from typing import List
-from simplerag.tools.rag_tool import rag_ingest, rag_retrieve
+from simplerag.tools.rag_tool import rag_ingest, rag_ingest_file, rag_retrieve
 @CrewBase
 class RagCrew:
     
@@ -20,7 +20,7 @@ class RagCrew:
     def rag_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["rag_agent"],
-            tools=[rag_ingest, rag_retrieve],
+            tools=[rag_ingest, rag_ingest_file, rag_retrieve],
             verbose=True
         )
     
@@ -29,7 +29,7 @@ class RagCrew:
         return Task(
             config=self.tasks_config["rag_ingest_task"],
             agent=self.rag_agent(),
-            tools=[rag_ingest]
+            tools=[rag_ingest, rag_ingest_file]
         )
     
     @task
