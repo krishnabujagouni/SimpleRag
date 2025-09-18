@@ -721,12 +721,12 @@ def _rag_retrieve_function(query: str, top_k: int = 3, file_format_filter: Optio
             return [{"error": "No documents found in the database."}]
         
         # Apply format filter if specified
-        if file_format_filter:
-            df = df[df['file_format'] == file_format_filter]
-            if len(df) == 0:
-                return [{"error": f"No documents found with format: {file_format_filter}"}]
+        # if file_format_filter:
+        #     df = df[df['file_format'] == file_format_filter]
+        #     if len(df) == 0:
+        #         return [{"error": f"No documents found with format: {file_format_filter}"}]
         
-        logger.info(f"Found {len(df)} documents in database")
+        # logger.info(f"Found {len(df)} documents in database")
         
         query_embedding = embed_query(query)
         

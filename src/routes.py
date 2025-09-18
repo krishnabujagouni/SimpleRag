@@ -390,7 +390,7 @@ async def upload(file: UploadFile = File(...), api_key: str = Depends(verify_api
 # -------------------
 class QueryRequest(BaseModel):
     query: str
-    file_format: str = ""
+    
 
 @router.post("/query")
 async def query_documents(req: QueryRequest, api_key: str = Depends(verify_api_key)):
@@ -401,6 +401,6 @@ async def query_documents(req: QueryRequest, api_key: str = Depends(verify_api_k
     result = rag_tool.retrieve(req.query, api_key)
     
     # 🚀 Trigger Crew
-    crew_result = rag_retrieve_crew.kickoff(inputs={"query": req.query, "file_format": req.file_format})
+    crew_result = rag_retrieve_crew.kickoff(inputs={"query": req.query})
     
     return {"query": req.query, "results": result, "crew_result": crew_result}
